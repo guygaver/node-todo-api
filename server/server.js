@@ -79,14 +79,14 @@ app.patch('/todos/:id', (req, res) => {
         return res.status(404).send();
     }
 
-    if ( _.isBoolean(body.completed) && body.completed) {
+    if ( _.isBoolean(body.completed) && body.completed ) {
         body.completedAt = new Date().getTime();
     } else {
         body.completed = false;
         body.completedAt = null;
     }
 
-    Todo.findByIdAndUpdate(id, {$set: body}, {new:true})
+    Todo.findByIdAndUpdate(id, {$set: body}, {new: true})
         .then(todo => {
 
             if ( !todo ) {
@@ -97,6 +97,20 @@ app.patch('/todos/:id', (req, res) => {
         })
         .catch(e => res.status(400).send());
 });
+
+app.post('/users', (req, res) => {
+    let body = _.pick(req.body, ['email', 'password']);
+    let user = new User(body);
+
+    user.save().then((user) => {
+        return user.generateAuthToken();
+    }).then((token) => {
+        res.header('x-auth', token).send(user);
+    }).catch((e) => {
+        res.status(400).send(e);
+    })
+});
+
 
 app.listen(port, () => {
     console.log(`App started on port ${port}`);
