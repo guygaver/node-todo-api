@@ -1,5 +1,6 @@
 require('./config/config.js');
 
+
 const _ = require('lodash');
 const express = require('express');
 const parser = require('body-parser');
@@ -8,6 +9,7 @@ let {mongoose} = require('./db/mongoose');
 let {ObjectId} = require('mongodb');
 let {Todo} = require('./models/Todo');
 let {User} = require('./models/User');
+const {authenticate} = require('./middleware/Authenticate');
 
 const app = express();
 const port = process.env.PORT;
@@ -111,6 +113,9 @@ app.post('/users', (req, res) => {
     })
 });
 
+app.get('/users/me', authenticate, (req, res) => {
+   res.send(req.user);
+});
 
 app.listen(port, () => {
     console.log(`App started on port ${port}`);
