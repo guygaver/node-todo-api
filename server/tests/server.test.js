@@ -283,17 +283,38 @@ describe('POST /users/login', function () {
             })
             .expect(400)
             .expect((res) => {
-                expect(res.headers['x-auth']).toBeTruthy();
+                // noinspection JSUnresolvedFunction
+                expect(res.headers['x-auth']).toBeUndefined();
             })
             .end((err, res) => {
                 if (err ) {
-                    done(err);
+                    return done(err);
                 }
 
                 User.findById(users[1]._id).then(user => {
                     expect(user.tokens[0]).toBeFalsy();
 
-                    done();
+                    return done();
+                }).catch(e => done(e))
+            })
+    });
+});
+
+describe('DELETE /users/me/token', () => {
+    it('should remove auth token on logout', (done) => {
+        request(app)
+            .delete('/users/me/token')
+            .set('x-auth', users[0].tokens[0].token)
+            .expect(200)
+            .end((err, res) => {
+                if (err ) {
+                    return done(err);
+                }
+
+                User.findById(users[1]._id).then(user => {
+                    expect(user.tokens.length).toBe(0);
+
+                    return done();
                 }).catch(e => done(e))
             })
     });
