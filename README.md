@@ -39,5 +39,5 @@ node server/server.js
 
 ## Running tests 
 ```
-npm run test
+npm test
 ```
