@@ -7,7 +7,7 @@ https://fierce-mesa-63842.herokuapp.com/
 - Building and deploying a Node server using ExpressJS
 - Managing CRUD with MongoDB and MongooseORM
 - Handling authentication using the JWT standard
-- TDDing JavaScript applications using Mocha, Jest, and Supertest
+- Testing JavaScript applications using Mocha, Jest, and Supertest
 
 ## Installation
 ```bash
